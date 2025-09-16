@@ -1,0 +1,235 @@
+:root {
+  --gr-primary-blue: #4285F4;
+  --gr-star-color: #FBBC05;
+  --gr-text-dark: #1e1f1f;
+  --gr-text-light: #5f6368;
+  --gr-border-color: #dadce0;
+  --gr-card-bg: #fff;
+  --gr-container-bg: #f8f9fa;
+}
+
+.google-reviews-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.gr-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.gr-header {
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 20px 0;
+  padding: 0 5px;
+  text-align: center;
+}
+.gr-header-left {
+  width:100%; 
+  text-align: center;
+}
+.gr-header-left h4 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-transform: none;
+  font-family: 'Poppins';
+  margin: 0 0 10px 0;
+  color: var(--gr-text-dark);
+}
+.gr-header-right {
+    width:100%;
+    margin-top: 15px;
+}
+.gr-rating-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gr-google-logo-small {
+  width: 20px;
+  height: 20px;
+}
+
+.gr-average-rating {
+  font-weight: 700;
+  color: var(--gr-text-dark);
+}
+
+.gr-verified-text {
+  font-size: 1.5rem;
+  color: #1e1f1f;
+}
+
+.gr-write-review-btn {
+  background-color: var(--gr-primary-blue);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.gr-write-review-btn:hover {
+  background-color: #1a73e8;
+  color: #fff;
+}
+
+.gr-card {
+  background: var(--gr-card-bg);
+  border: 1px solid var(--gr-border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.gr-summary-card {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e6f0ff 100%);
+}
+
+.gr-summary-header {
+  display: grid;
+  grid-template-areas: "avatars ai" "avatars title";
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.gr-summary-avatars {
+  grid-area: avatars;
+  display: flex;
+}
+.gr-summary-avatars img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -15px;
+}
+.gr-summary-avatars img:first-child {
+  margin-left: 0;
+}
+
+.gr-ai-badge {
+  grid-area: ai;
+  background: rgba(120, 82, 255, 0.1);
+  color: #7852ff;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  justify-self: start;
+}
+
+.gr-summary-title {
+  grid-area: title;
+}
+.gr-summary-title strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--gr-text-dark);
+}
+.gr-summary-title small {
+  font-size: 1.5rem;
+  color: #1E1F1f;
+}
+
+.gr-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.gr-author-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.gr-author-info {
+  flex-grow: 1;
+}
+
+.gr-author-info strong {
+  display: block;
+  font-family: 'Poppins';
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gr-text-dark);
+}
+
+.gr-author-info small {
+  font-size: 1.3rem;
+  color: #767676;
+}
+
+.gr-google-logo-card, .gr-verified-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.gr-card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* ÚJ: Konténer a csillagoknak és az ikonnak */
+.gr-rating-line {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Távolság a csillagok és az ikon között */
+    margin-bottom: 10px;
+}
+
+.gr-verified-check {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.gr-comment {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    color: var(--gr-text-dark);
+    margin-top: 5px;
+    flex-grow: 1;
+}
+
+.gr-read-more {
+    color: var(--gr-primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px; 
+    display: inline-block;
+}
+
+.gr-stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  font-size: 20px;
+  font-family: Times;
+  line-height: 1;
+}
+.gr-stars::before {
+  content: '★★★★★';
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--gr-star-color) var(--percent), #d3d3d3 var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+

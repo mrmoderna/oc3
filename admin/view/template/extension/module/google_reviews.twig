@@ -1,0 +1,165 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+          
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-api-settings" data-toggle="tab">{{ tab_api_settings }}</a></li>
+            <li><a href="#tab-review-management" data-toggle="tab">{{ tab_review_management }}</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- Általános Beállítások -->
+            <div class="tab-pane active" id="tab-general">
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_google_reviews_name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                  {% if error_name %}<div class="text-danger">{{ error_name }}</div>{% endif %}
+                </div>
+              </div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label><div class="col-sm-10"><input type="text" name="module_google_reviews_title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control" /></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-summary">{{ entry_summary }}</label><div class="col-sm-10"><textarea name="module_google_reviews_summary" rows="5" placeholder="{{ entry_summary }}" id="input-summary" class="form-control">{{ summary }}</textarea></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-write-review-url">{{ entry_write_review_url }}</label><div class="col-sm-10"><input type="text" name="module_google_reviews_write_review_url" value="{{ write_review_url }}" placeholder="{{ entry_write_review_url }}" id="input-write-review-url" class="form-control" /></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-reviews-to-display">{{ entry_reviews_to_display }}</label><div class="col-sm-10"><input type="number" name="module_google_reviews_reviews_to_display" value="{{ reviews_to_display|default(3) }}" class="form-control" /></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label><div class="col-sm-10"><select name="module_google_reviews_sort_order" class="form-control"><option value="newest" {% if not sort_order or sort_order == 'newest' %}selected="selected"{% endif %}>{{ text_sort_order_newest }}</option><option value="random" {% if sort_order == 'random' %}selected="selected"{% endif %}>{{ text_sort_order_random }}</option></select></div></div>
+              <hr>
+              <h4>{{ text_official_google_data }}</h4>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_overall_rating }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_google_reviews_overall_rating" value="{{ overall_rating }}" class="form-control" readonly />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_total_reviews }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_google_reviews_total_reviews" value="{{ total_reviews }}" class="form-control" readonly />
+                </div>
+              </div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label><div class="col-sm-10"><select name="module_google_reviews_status" id="input-status" class="form-control">{% if status %}<option value="1" selected="selected">{{ text_enabled }}</option><option value="0">{{ text_disabled }}</option>{% else %}<option value="1">{{ text_enabled }}</option><option value="0" selected="selected">{{ text_disabled }}</option>{% endif %}</select></div></div>
+            </div>
+
+            <!-- Scraping API Beállítások -->
+            <div class="tab-pane" id="tab-api-settings">
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-scraper-api-url">{{ entry_scraper_api_url }}</label><div class="col-sm-10"><textarea name="module_google_reviews_scraper_api_url" rows="4" placeholder="{{ entry_scraper_api_url }}" class="form-control">{{ scraper_api_url }}</textarea></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-min-rating">{{ entry_min_rating }}</label><div class="col-sm-10"><select name="module_google_reviews_min_rating" class="form-control">{% for i in 1..5 %}<option value="{{ i }}" {% if min_rating == i %}selected="selected"{% endif %}>{{ i }} csillag</option>{% endfor %}</select></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label" for="input-max-reviews-to-fetch">{{ entry_max_reviews_to_fetch }}</label><div class="col-sm-10"><input type="number" name="module_google_reviews_max_reviews_to_fetch" value="{{ max_reviews_to_fetch|default(50) }}" class="form-control" /></div></div>
+              <div class="form-group"><label class="col-sm-2 control-label">Adatok Frissítése</label><div class="col-sm-10"><a href="{{ fetch_action_non_ajax }}" class="btn btn-primary"><i class="fa fa-cloud-download"></i> {{ button_fetch }}</a></div></div>
+            </div>
+
+            <!-- Értékelések Kezelése -->
+            <div class="tab-pane" id="tab-review-management">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                        <td class="text-left"><a href="{{ sort_author }}" {% if sort == 'author_name' %} class="{{ order|lower }}" {% endif %}>{{ column_author }}</a></td>
+                        <td class="text-center" style="width: 150px;"><a href="{{ sort_rating }}" {% if sort == 'rating' %} class="{{ order|lower }}" {% endif %}>{{ column_rating }}</a></td>
+                        <td class="text-center" style="width: 150px;"><a href="{{ sort_status }}" {% if sort == 'is_visible' %} class="{{ order|lower }}" {% endif %}>{{ column_status }}</a></td>
+                        <td class="text-left" style="width: 200px;"><a href="{{ sort_review_date }}" {% if sort == 'review_id' %} class="{{ order|lower }}" {% endif %}>{{ column_date_added }}</a></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if reviews %}
+                        {% for review in reviews %}
+                        <tr>
+                            <td class="text-left">
+                                <img src="{{ review.author_photo_url }}" alt="{{ review.author_name }}" class="img-thumbnail" style="width: 40px; height: 40px; float: left; margin-right: 10px;">
+                                <strong>{{ review.author_name }}</strong>
+                                <br>
+                                <small style="color: #777;"><em>"{{ review.comment_text|slice(0, 100) }}{{ review.comment_text|length > 100 ? '...' : '' }}"</em></small>
+                            </td>
+                            <td class="text-center">{{ review.rating }}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm toggle-visibility {% if review.is_visible %}btn-success{% else %}btn-danger{% endif %}" data-review-id="{{ review.review_id }}">
+                                    <i class="fa {% if review.is_visible %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i> {% if review.is_visible %}{{ text_enabled }}{% else %}{{ text_disabled }}{% endif %}
+                                </button>
+                            </td>
+                            <td class="text-left">{{ review.review_date }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr><td class="text-center" colspan="4">{{ text_no_results }}</td></tr>
+                        {% endif %}
+                    </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// Láthatóság váltása AJAX-szal
+$('.toggle-visibility').on('click', function(e) {
+    e.preventDefault();
+    var button = $(this);
+    var review_id = button.data('review-id');
+
+    if (confirm('{{ text_confirm_toggle }}')) {
+        $.ajax({
+            url: 'index.php?route=extension/module/google_reviews/toggleVisibility&user_token={{ user_token }}',
+            type: 'post',
+            dataType: 'json',
+            data: { review_id: review_id },
+            beforeSend: function() { button.button('loading'); },
+            complete: function() { button.button('reset'); },
+            success: function(json) {
+                if (json['error']) { alert(json['error']); }
+                if (json['success']) {
+                    if (button.hasClass('btn-success')) {
+                        button.removeClass('btn-success').addClass('btn-danger');
+                        button.html('<i class="fa fa-times-circle"></i> {{ text_disabled }}');
+                    } else {
+                        button.removeClass('btn-danger').addClass('btn-success');
+                        button.html('<i class="fa fa-check-circle"></i> {{ text_enabled }}');
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) { alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText); }
+        });
+    }
+});
+
+// A megfelelő fül megnyitása oldalbetöltés után
+$(document).ready(function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('sort') || urlParams.has('page')) {
+        $('a[href="#tab-review-management"]').tab('show');
+    }
+});
+</script>
+{{ footer }}
+

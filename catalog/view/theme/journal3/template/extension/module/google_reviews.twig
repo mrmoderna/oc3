@@ -1,0 +1,97 @@
+<div class="google-reviews-container">
+  
+  <div class="gr-header">
+    <div class="gr-header-left">
+      <h4>{{ title }}</h4>
+      <div class="gr-rating-summary">
+        <img src="image/catalog/grafikak/google.png" alt="Google" class="gr-google-logo-small">
+        <div class="gr-stars" style="--rating: {{ average_rating }};" aria-label="Rating of {{ average_rating }} out of 5."></div>
+        <span class="gr-average-rating">{{ average_rating }}</span>
+        <span class="gr-verified-text">Google által {{ text_verified_by }} ({{ total_reviews }} {{ text_reviews }})</span>
+      </div>
+    </div>
+    <div class="gr-header-right">
+      <a href="{{ write_review_url }}" target="_blank" class="gr-write-review-btn">{{ text_write_review }}</a>
+    </div>
+  </div>
+
+  <div class="gr-cards-grid">
+
+      <!-- Összefoglaló Kártya -->
+      <div class="gr-card gr-summary-card">
+        <div class="gr-summary-header">
+          <div class="gr-summary-avatars">
+            {% if summary_avatars %}
+              {% for avatar_url in summary_avatars %}
+                <img src="{{ avatar_url }}" alt="Avatar">
+              {% endfor %}
+            {% else %}
+              <img src="https://placehold.co/40x40/F0F8FF/4A90E2?text=A" alt="Avatar 1">
+              <img src="https://placehold.co/40x40/E6E6FA/6A5ACD?text=B" alt="Avatar 2">
+              <img src="https://placehold.co/40x40/FFF0F5/DB7093?text=C" alt="Avatar 3">
+            {% endif %}
+          </div>
+          <div class="gr-ai-badge">AI</div>
+          <div class="gr-summary-title">
+            <strong>{{ text_review_summary }}</strong>
+            <small>{{ text_based_on }} {{ total_reviews }} {{ text_reviews }}</small>
+          </div>
+        </div>
+        <p class="gr-comment" data-fulltext="{{ summary }}">
+            {{ summary|length > 150 ? summary|slice(0, 150) ~ '...' : summary }}
+        </p>
+        {% if summary|length > 150 %}
+            <a href="#" class="gr-read-more">{{ text_read_more }}</a>
+        {% endif %}
+      </div>
+      
+      <!-- Értékelés Kártyák -->
+      {% for review in google_review_items %}
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <img src="{{ review.author_photo_url }}" alt="{{ review.author_name }}" class="gr-author-photo">
+          <div class="gr-author-info">
+            <strong>{{ review.author_name }}</strong>
+            <small>{{ review.review_date }}</small>
+          </div>
+          <img src="image/catalog/grafikak/google.png" alt="Google" class="gr-google-logo-card">
+        </div>
+        <div class="gr-card-body">
+          <div class="gr-rating-line">
+            <div class="gr-stars" style="--rating: {{ review.rating }};"></div>
+            <span class="gr-verified-check"><img src="image/catalog/grafikak/social-media.png" alt="Ellenőrzött" class="gr-verified-icon"></span>
+          </div>
+          <p class="gr-comment" data-fulltext="{{ review.comment_text }}">
+              {{ review.comment_text|length > 150 ? review.comment_text|slice(0, 150) ~ '...' : review.comment_text }}
+          </p>
+          {% if review.comment_text|length > 150 %}
+              <a href="#" class="gr-read-more">{{ text_read_more }}</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      
+  </div>
+</div>
+
+<script>
+// A "Tovább olvasom" funkcionalitás
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.gr-read-more').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var commentP = this.parentElement.querySelector('.gr-comment');
+      var fullText = commentP.getAttribute('data-fulltext');
+      
+      if (this.innerText.trim() === '{{ text_read_more }}') {
+        commentP.innerText = fullText;
+        this.innerText = '{{ text_read_less }}';
+      } else {
+        commentP.innerText = fullText.substring(0, 150) + '...';
+        this.innerText = '{{ text_read_more }}';
+      }
+    });
+  });
+});
+</script>
+

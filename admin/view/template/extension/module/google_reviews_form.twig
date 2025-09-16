@@ -1,0 +1,113 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+          <a href="{{ back_to_settings }}" data-toggle="tooltip" title="{{ button_back_to_settings }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title_reviews }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_review_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div id="review-list-container">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                    <td class="text-left">
+                        <a href="{{ sort_author }}" {% if sort == 'author_name' %} class="{{ order|lower }}" {% endif %}>{{ column_author }}</a>
+                    </td>
+                    <td class="text-center" style="width: 150px;">
+                        <a href="{{ sort_rating }}" {% if sort == 'rating' %} class="{{ order|lower }}" {% endif %}>{{ column_rating }}</a>
+                    </td>
+                    <td class="text-center" style="width: 150px;">
+                        <a href="{{ sort_status }}" {% if sort == 'is_visible' %} class="{{ order|lower }}" {% endif %}>{{ column_status }}</a>
+                    </td>
+                    <td class="text-left" style="width: 200px;">
+                        <a href="{{ sort_review_date }}" {% if sort == 'review_date' %} class="{{ order|lower }}" {% endif %}>{{ column_date_added }}</a>
+                    </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if reviews %}
+                    {% for review in reviews %}
+                    <tr>
+                    <td class="text-left">{{ review.author_name }}</td>
+                    <td class="text-center">{{ review.rating }}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm toggle-visibility {% if review.is_visible %}btn-success{% else %}btn-danger{% endif %}" data-review-id="{{ review.review_id }}">
+                            <i class="fa {% if review.is_visible %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i> {% if review.is_visible %}{{ text_enabled }}{% else %}{{ text_disabled }}{% endif %}
+                        </button>
+                    </td>
+                    <td class="text-left">{{ review.review_date }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                    <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 text-left">{{ pagination }}</div>
+                <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// Láthatóság váltása AJAX-szal (ez továbbra is AJAX-os marad a jobb felhasználói élményért)
+$('.toggle-visibility').on('click', function(e) {
+    e.preventDefault();
+    var button = $(this);
+    var review_id = button.data('review-id');
+
+    if (confirm('{{ text_confirm_toggle }}')) {
+        $.ajax({
+            url: 'index.php?route=extension/module/google_reviews/toggleVisibility&user_token={{ user_token }}',
+            type: 'post',
+            dataType: 'json',
+            data: { review_id: review_id },
+            beforeSend: function() {
+                button.button('loading');
+            },
+            complete: function() {
+                button.button('reset');
+            },
+            success: function(json) {
+                if (json['error']) {
+                    alert(json['error']);
+                }
+                if (json['success']) {
+                    // Egyszerűen megfordítjuk a gomb stílusát és szövegét
+                    if (button.hasClass('btn-success')) {
+                        button.removeClass('btn-success').addClass('btn-danger');
+                        button.html('<i class="fa fa-times-circle"></i> {{ text_disabled }}');
+                    } else {
+                        button.removeClass('btn-danger').addClass('btn-success');
+                        button.html('<i class="fa fa-check-circle"></i> {{ text_enabled }}');
+                    }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
+});
+</script>
+{{ footer }}

@@ -1,0 +1,47 @@
+<form action="" method="post" enctype="multipart/form-data" id="form-review">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td class="text-left">
+            <a href="{{ sort_author }}" {% if sort == 'author_name' %} class="{{ order|lower }}" {% endif %}>{{ column_author }}</a>
+          </td>
+          <td class="text-center" style="width: 150px;">
+             <a href="{{ sort_rating }}" {% if sort == 'rating' %} class="{{ order|lower }}" {% endif %}>{{ column_rating }}</a>
+          </td>
+          <td class="text-center" style="width: 150px;">
+            <a href="{{ sort_status }}" {% if sort == 'is_visible' %} class="{{ order|lower }}" {% endif %}>{{ column_status }}</a>
+          </td>
+          <td class="text-left" style="width: 200px;">
+            <a href="{{ sort_review_date }}" {% if sort == 'review_date' %} class="{{ order|lower }}" {% endif %}>{{ column_date_added }}</a>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        {% if reviews %}
+        {% for review in reviews %}
+        <tr>
+          <td class="text-left">{{ review.author_name }}</td>
+          <td class="text-center">{{ review.rating }}</td>
+          <td class="text-center">
+             <button type="button" class="btn btn-sm toggle-visibility {% if review.is_visible %}btn-success{% else %}btn-danger{% endif %}" data-review-id="{{ review.review_id }}">
+                <i class="fa {% if review.is_visible %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i> {% if review.is_visible %}{{ text_enabled }}{% else %}{{ text_disabled }}{% endif %}
+            </button>
+          </td>
+          <td class="text-left">{{ review.review_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td class="text-center" colspan="4">{{ text_no_results }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</form>
+<div class="row">
+  <div class="col-sm-6 text-left">{{ pagination }}</div>
+  <div class="col-sm-6 text-right">{{ results }}</div>
+</div>
+
